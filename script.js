@@ -1,3 +1,5 @@
+/*start of inheritance*/
+
 function Person(name, age){
 	this.name = name;
 	this.age = age;
@@ -103,3 +105,82 @@ const  shapes =[
  ];
  for(let shap of shapes)
  	shap.duplicate();
+
+/*end of inheritance in javascript*/
+/*start mixin */
+
+function mixin(target,...sources){
+	Object.assign(target,...sources);
+}
+
+const canEat={
+	eat: function(){
+		this.hunger--;
+		console.log('eating');
+	}
+};
+const canWalk ={
+	walk: function(){
+		console.log('walking');
+	}
+};
+const canSwim={
+	swim: function(){
+		console.log('swimming');
+	}
+}
+
+//const person = Object.assign({},canEat,canWalk);
+//console.log(person);
+
+function Person(){
+
+}
+mixin(Person.prototype,canEat,canWalk);
+const person = new Person();
+
+function GoldFish(){};
+mixin(GoldFish.prototype,canEat,canSwim);
+const goldfish = new GoldFish();
+/*My Excercise solution*/
+
+function HtmlElement(){
+	 this.click = function(){
+	 	console.log('clicked');
+	 }
+}
+HtmlElement.prototype.focus = function(){
+	console.log('focused');
+}
+
+function HtmlSelectElement( items =[]){
+	this.items=items;
+    this.addItem = function(item){
+   	 this.items.push(item);
+   };
+    this.removeItem = function(item){
+           this.items.splice(this.items.indexOf(item),1);
+    };
+
+    this.render =function(){
+    	return `<select>
+    	              ${this.items.map(item =>`<option>${item}</option>`).join('')}
+    	        </select>`;
+    }
+
+}
+//HtmlSelectElement.prototype = Object.create(HtmlElement.prototype);
+
+HtmlSelectElement.prototype = new HtmlElement();
+HtmlSelectElement.prototype.constructor = HtmlSelectElement;
+
+/*Excercise no 2*/
+
+ function HtmlImageElement(src){
+ 	this.src = src;
+ 	this.render = function(){
+ 		return `<img src="${this.src}"/>`;
+ 	}
+ }
+ HtmlImageElement.prototype = new HtmlElement;
+ HtmlImageElement.prototype.constructor = HtmlImageElement;
